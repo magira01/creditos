@@ -16,12 +16,14 @@ public class ABM {
     public static Scanner Teclado = new Scanner(System.in);
 
     protected ClienteManager ABMCliente = new ClienteManager();
+    protected PrestamoManager ABMPrestamo = new PrestamoManager();
 
     public void iniciar() throws Exception {
 
         try {
 
             ABMCliente.setup();
+            ABMPrestamo.setup();
 
             printOpciones();
 
@@ -54,6 +56,14 @@ public class ABM {
 
                     case 5:
                         listarPorNombre();
+                        break;
+
+                    case 6:
+                        listarPrestamos();
+                        break;
+
+                    case 7:
+                        altaPrestamo();
                         break;
 
                     default:
@@ -253,6 +263,40 @@ public class ABM {
         }
     }
 
+    public void listarPrestamos() {
+
+        List<Prestamo> todosLosprestamos = ABMPrestamo.mostrarTodos();
+        for (Prestamo p : todosLosprestamos) {
+            mostrarPrestamo(p);
+        }
+
+    }
+
+    public void altaPrestamo() {
+
+        Prestamo prestamo = new Prestamo();
+
+        System.out.println("Ingrese el importe:");
+        prestamo.setImporte(new BigDecimal(Teclado.nextInt()));
+
+        System.out.println("Ingrese cantidad de cuotas:");
+        prestamo.setCuotas(Teclado.nextInt());
+
+        prestamo.setFecha(new Date());
+
+        prestamo.setFechaAlta(new Date());
+
+        System.out.println("Ingrese ID de cliente:");
+        
+        Cliente cliente_id = ABMCliente.read(Teclado.nextInt());
+        prestamo.setCliente(cliente_id);
+
+        ABMPrestamo.create(prestamo);
+
+        System.out.println("El prestamo fue otorgado con exito" + prestamo.getPrestamoId());
+
+    }
+
     public void mostrarCliente(Cliente cliente) {
 
         System.out.print("Id: " + cliente.getClienteId() + " Nombre: " + cliente.getNombre() + " DNI: "
@@ -267,14 +311,29 @@ public class ABM {
         System.out.println(" Fecha Nacimiento: " + fechaNacimientoStr);
     }
 
+    public void mostrarPrestamo(Prestamo prestamo) {
+        System.out.println("Id Préstamo: " + prestamo.getPrestamoId() + " Datos Cliente: " + prestamo.getCliente()
+                + " Cuotas: " + prestamo.getCuotas() + " Importe: " + prestamo.getImporte());
+
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String fechaPrestamoStr = formatter.format(prestamo.getFecha());
+
+        System.out.println("Fecha: " + fechaPrestamoStr);
+
+        String fechaPrestamoAltaStr = formatter.format(prestamo.getFechaAlta());
+        System.out.println("Fecha de Alta: " + fechaPrestamoAltaStr);
+    }
+
     public static void printOpciones() {
         System.out.println("=======================================");
-        System.out.println("");
+        System.out.println("INGRESE NUMERO DE OPCION A REALIZAR");
         System.out.println("1. Para agregar un cliente.");
         System.out.println("2. Para eliminar un cliente.");
         System.out.println("3. Para modificar un cliente.");
         System.out.println("4. Para ver el listado.");
         System.out.println("5. Buscar un cliente por nombre especifico(SQL Injection)).");
+        System.out.println("6. Listado de prestamos. ");
+        System.out.println("7: Generar prestamo a un cliente existente.");
         System.out.println("0. Para terminar.");
         System.out.println("");
         System.out.println("=======================================");
