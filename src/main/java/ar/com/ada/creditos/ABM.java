@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import ar.com.ada.creditos.entities.*;
+import ar.com.ada.creditos.entities.Prestamo.EstadoPrestamoEnum;
 import ar.com.ada.creditos.excepciones.*;
 import ar.com.ada.creditos.managers.*;
 
@@ -123,6 +124,7 @@ public class ABM {
         prestamo.setFecha(new Date());
         prestamo.setFechaAlta(new Date());
         prestamo.setCliente(cliente);
+        prestamo.setEstadoId(EstadoPrestamoEnum.APROBADO);
 
         ABMCliente.create(cliente);
 
@@ -287,7 +289,7 @@ public class ABM {
         prestamo.setFechaAlta(new Date());
 
         System.out.println("Ingrese ID de cliente:");
-        
+
         Cliente cliente_id = ABMCliente.read(Teclado.nextInt());
         prestamo.setCliente(cliente_id);
 
