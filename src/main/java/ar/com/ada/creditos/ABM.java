@@ -252,6 +252,8 @@ public class ABM {
         for (Cliente c : todos) {
             mostrarCliente(c);
         }
+        int cantidadClientes = ABMCliente.contarClienteJPQL();
+        System.out.println("La cantidad de clientes totales es: "+ cantidadClientes);
     }
 
     public void listarPorNombre() {
